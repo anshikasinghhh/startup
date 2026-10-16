@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Startup Validator - Get Smart Insights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            padding: 50px;
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background-size: 200% 200%;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            border-radius: 25px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 15px 35px rgba(102, 126, 234, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes logoGlow {
+            0% { 
+                background-position: 0% 50%;
+                box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            }
+            100% { 
+                background-position: 100% 50%;
+                box-shadow: 0 15px 35px rgba(240, 147, 251, 0.6);
+            }
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 
+                0 25px 50px rgba(102, 126, 234, 0.6),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .logo::before {
+            content: "🚀";
+            font-size: 36px;
+            animation: rocket 2s ease-in-out infinite;
+        }
+
+        @keyframes rocket {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: titleGradient 4s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes titleGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .title:hover {
+            transform: scale(1.05);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .subtitle:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .message-input {
+            width: 100%;
+            min-height: 140px;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            color: #334155;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #f093fb;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 0 0 4px rgba(240, 147, 251, 0.2),
+                0 15px 35px rgba(240, 147, 251, 0.15);
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .message-input::placeholder {
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+
+        .message-input:focus::placeholder {
+            color: #cbd5e1;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 10px 30px rgba(102, 126, 234, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+            width: 100%;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            background-position: 100% 0;
+            box-shadow: 
+                0 20px 40px rgba(240, 147, 251, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 20px 40px rgba(240, 147, 251, 0.5); }
+            50% { box-shadow: 0 25px 50px rgba(240, 147, 251, 0.7); }
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 30px 25px;
+            border-radius: 18px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px) scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border-color: rgba(240, 147, 251, 0.4);
+        }
+
+        .feature:nth-child(1):hover {
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.2);
+        }
+
+        .feature:nth-child(2):hover {
+            border-color: rgba(249, 115, 22, 0.5);
+            box-shadow: 0 20px 40px rgba(249, 115, 22, 0.2);
+        }
+
+        .feature:nth-child(3):hover {
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 20px 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .feature:nth-child(4):hover {
+            border-color: rgba(236, 72, 153, 0.5);
+            box-shadow: 0 20px 40px rgba(236, 72, 153, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature:hover .feature-icon {
+            transform: scale(1.3) rotate(10deg);
+        }
+
+        .feature-title {
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature:hover .feature-title {
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .feature-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature:hover .feature-desc {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+                margin: 15px;
+            }
+
+            .title {
+                font-size: 2.2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .logo {
+                width: 70px;
+                height: 70px;
+            }
+
+            .logo::before {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"></div>
+            <h1 class="title">AI Startup Validator</h1>
+            <p class="subtitle">Get intelligent insights and suggestions for your startup ideas. Our AI analyzes market potential, competitive landscape, and provides actionable recommendations.</p>
+        </div>
+
+        <form class="form-section" method="POST" action="/analyze-startup">
+            <label for="message" class="input-label">What would you like to know about your startup?</label>
+            <div class="input-container">
+                <textarea 
+                    id="message" 
+                    name="query"
+                    class="message-input" 
+                    placeholder="Describe your startup idea, ask about market validation, competitor analysis, business model suggestions, or any other questions you have..."
+                    rows="5"
+                    required
+                ></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Get AI Insights</button>
+        </form>
+        {% if response %}
+        <div class="mt-6 bg-gray-700 p-4 rounded-lg border border-gray-600">
+            <h2 class="text-xl font-semibold text-white mb-2">AI says</h2>
+            <p class="text-gray-300">{{ response }}</p>
+        </div>
+        {% endif %}
+
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">📊</span>
+                <div class="feature-title">Market Analysis</div>
+                <div class="feature-desc">Get insights on market size, trends, and opportunities</div>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🎯</span>
+                <div class="feature-title">Target Audience</div>
+                <div class="feature-desc">Identify and understand your ideal customers</div>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">⚡</span>
+                <div class="feature-title">Business Model</div>
+                <div class="feature-desc">Explore revenue streams and monetization strategies</div>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🏆</span>
+                <div class="feature-title">Competitive Edge</div>
+                <div class="feature-desc">Analyze competitors and find your unique advantage</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

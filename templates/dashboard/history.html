@@ -1,0 +1,482 @@
+{% extends "base_dash.html" %}
+{% block body %}
+<div class="main-wrapper">
+    <div class="notebook-container">
+        <!-- Notebook Header -->
+        <div class="notebook-header">
+            <div class="header-line"></div>
+            <h1 class="notebook-title">📚 Your Startup Journal</h1>
+            <div class="header-subtitle">Track your entrepreneurial ideas and business goals</div>
+            <div class="submissions-count">
+                <span class="count-badge">{{ submissions|length }} Entries</span>
+            </div>
+        </div>
+
+        <!-- Notebook Content -->
+        <div class="notebook-content">
+            {% for entry in submissions %}
+            <div class="journal-entry">
+    <!-- Entry Number -->
+    <div class="entry-number">{{ forloop.counter }}</div>
+    
+    <!-- Entry Content -->
+    <div class="entry-content">
+        <!-- Startup Idea -->
+        <div class="entry-section">
+            <h3 class="section-label">💡 Startup Idea</h3>
+            <div class="section-text">{{ entry.startup_idea }}</div>
+        </div>
+
+        <!-- Business Domain -->
+        <div class="entry-section">
+            <h3 class="section-label">🏢 Business Domain</h3>
+            <div class="section-text">{{ entry.get_business_domain_display }}</div>
+        </div>
+
+        <!-- Problem Statement -->
+        <div class="entry-section">
+            <h3 class="section-label">❗ Problem Statement</h3>
+            <div class="section-text">{{ entry.problem_statement }}</div>
+        </div>
+
+        <!-- Business Goal -->
+        <div class="entry-section">
+            <h3 class="section-label">🎯 Business Goal</h3>
+            <div class="section-text">{{ entry.business_goal }}</div>
+        </div>
+
+        <!-- Monetization Strategy -->
+        <div class="entry-section">
+            <h3 class="section-label">💰 Monetization Strategy</h3>
+            <div class="section-text">{{ entry.monetization_strategy }}</div>
+        </div>
+
+        <!-- Social Impact -->
+        <div class="entry-section">
+            <h3 class="section-label">🌱 Social Impact</h3>
+            <div class="section-text">{{ entry.social_impact }}</div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="entry-section">
+            <h3 class="section-label">⏳ Timeline</h3>
+            <div class="section-text">{{ entry.timeline }}</div>
+        </div>
+
+        <!-- Entry Footer -->
+        <div class="entry-footer">
+            <div class="entry-date">
+                📅 {{ entry.created_at|date:"F d, Y" }} at {{ entry.created_at|date:"g:i A" }}
+            </div>
+            
+            <form action="{% url 'dashboard:delete' entry.id %}" method="POST" class="delete-form">
+                {% csrf_token %}
+                <button type="submit" 
+                        onclick="return confirm('Are you sure you want to delete this entry?')" 
+                        class="delete-btn">
+                    🗑️ Delete
+                </button>
+            </form>
+            <form action="{% url 'dashboard:update' entry.id %}" method="GET" style="display: inline;">
+                    <button type="submit" class="update-btn">
+                    ✏️ Update
+                    </button>
+                </form>
+        </div>
+    </div>
+</div>
+
+            {% empty %}
+            <!-- Empty State -->
+            <div class="empty-journal">
+                <div class="empty-icon">📝</div>
+                <h2 class="empty-title">Your Journal is Empty</h2>
+                <p class="empty-text">Start documenting your startup journey by adding your first business idea!</p>
+                <a href="{% url 'dashboard:dashboard' %}" class="add-entry-btn">✨ Write Your First Entry</a>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Notebook Footer -->
+        <div class="notebook-footer">
+            <div class="footer-line"></div>
+            <div class="footer-text">Keep building, keep dreaming! 🚀</div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Main Wrapper */
+    .main-wrapper {
+        min-height: 100vh;
+        padding: 20px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        background: transparent;
+        width: 100%;
+        margin-top:-20px;
+    }
+
+    /* Notebook Container */
+    .notebook-container {
+        max-width: 1200px;
+        width: 95%;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.1),
+            0 1px 8px rgba(0, 0, 0, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        border: 1px solid #e8e8e8;
+        overflow: hidden;
+        position: relative;
+        margin-top:-20px;
+        min-height: 85vh;
+    }
+
+    /* Notebook Lines Effect */
+    .notebook-container::before {
+        content: '';
+        position: absolute;
+        left: 80px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #ff6b6b;
+        z-index: 1;
+    }
+
+    .notebook-container::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 100%;
+        background-image: repeating-linear-gradient(
+            transparent,
+            transparent 27px,
+            #e8f4fd 27px,
+            #e8f4fd 28px
+        );
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Header */
+    .notebook-header {
+        padding: 40px 100px 30px 100px;
+        border-bottom: 3px solid #2196f3;
+        position: relative;
+        z-index: 2;
+        background: linear-gradient(to right, #fafafa, #ffffff);
+    }
+
+    .header-line {
+        height: 2px;
+        background: #2196f3;
+        margin-bottom: 20px;
+        width: 100px;
+    }
+
+    .notebook-title {
+        font-family: 'Georgia', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin: 0 0 10px 0;
+        line-height: 1.2;
+    }
+
+    .header-subtitle {
+        font-family: 'Georgia', serif;
+        font-size: 1.1rem;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 20px;
+    }
+
+    .submissions-count {
+        text-align: right;
+    }
+
+    .count-badge {
+        display: inline-block;
+        background: #2196f3;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-family: 'Georgia', serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    /* Content */
+    .notebook-content {
+        padding: 20px 20px 40px 20px;
+        position: relative;
+        z-index: 2;
+        background: white;
+        min-height: 60vh;
+        max-width: 1100px;     /* ya jitna chahiye */
+        margin: 0 auto;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    /* Journal Entry */
+    .journal-entry {
+        display: flex;
+        margin-bottom: 40px;
+        padding: 25px 0;
+        border-bottom: 1px dotted #ccc;
+        position: relative;
+    }
+
+    .journal-entry:last-child {
+        border-bottom: none;
+    }
+
+    /* Entry Number */
+    .entry-number {
+        width: 50px;
+        height: 50px;
+        background: #2196f3;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Georgia', serif;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-right: 30px;
+        flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+    }
+
+    /* Entry Content */
+    .entry-content {
+        flex: 1;
+    }
+
+    .entry-section {
+        margin-bottom: 20px;
+    }
+
+    .section-label {
+        font-family: 'Georgia', serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2196f3;
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-text {
+        font-family: 'Georgia', serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #333;
+        padding-left: 20px;
+        border-left: 3px solid #e3f2fd;
+        background: #fafafa;
+        padding: 15px 20px;
+        border-radius: 0 8px 8px 0;
+        margin-bottom: 15px;
+    }
+
+    /* Entry Footer */
+    .entry-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .entry-date {
+        font-family: 'Georgia', serif;
+        font-size: 0.9rem;
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Delete Form */
+    .delete-form {
+        margin: 0;
+    }
+
+    .delete-btn {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-family: 'Georgia', serif;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .delete-btn:hover {
+        background: #ff5252;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+    }
+.update-btn {
+    background: #2196f3; /* same as notebook blue */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Georgia', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+}
+
+.update-btn:hover {
+    background: #1976d2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+    /* Empty State */
+    .empty-journal {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+    }
+
+    .empty-title {
+        font-family: 'Georgia', serif;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .empty-text {
+        font-family: 'Georgia', serif;
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .add-entry-btn {
+        display: inline-block;
+        background: #2196f3;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-family: 'Georgia', serif;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .add-entry-btn:hover {
+        background: #1976d2;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(33, 150, 243, 0.3);
+        text-decoration: none;
+    }
+
+    /* Footer */
+    .notebook-footer {
+        padding: 30px 100px 40px 100px;
+        border-top: 2px solid #e3f2fd;
+        background: #fafafa;
+        position: relative;
+        z-index: 2;
+    }
+
+    .footer-line {
+        height: 2px;
+        background: #2196f3;
+        margin-bottom: 15px;
+        width: 80px;
+    }
+
+    .footer-text {
+        font-family: 'Georgia', serif;
+        color: #666;
+        font-style: italic;
+        text-align: center;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-wrapper {
+            padding: 20px 10px;
+        }
+
+        .notebook-container {
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            justify-content: center; /* center inside content */
+            padding: 20px 0;     
+        }
+
+        .notebook-header,
+        .notebook-content,
+        .notebook-footer {
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+
+        .notebook-container::before {
+            left: 50px;
+        }
+
+        .notebook-title {
+            font-size: 2rem;
+        }
+
+        .journal-entry {
+            flex-direction: column;
+        }
+
+        .entry-number {
+            margin-right: 0;
+            margin-bottom: 20px;
+            align-self: flex-start;
+        }
+
+        .entry-footer {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        .main-wrapper {
+            background: white;
+        }
+        
+        .delete-btn {
+            display: none;
+        }
+    }
+</style>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Georgia:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+{% endblock %}

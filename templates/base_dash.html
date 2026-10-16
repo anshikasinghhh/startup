@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}GoValid - Validate Your Startup Idea{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base_dash.css' %}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Navigation -->
+   <!-- Navigation -->
+<nav class="nav">
+    <div class="nav-container" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="brand">🚀 GoValid</div>
+        
+        <!-- Right side: Logout + Profile Icon together -->
+        <div style="display: flex; align-items: center; gap: 16px;">
+            <a href="{% url 'accounts:logout' %}" class="logout-btn">Logout</a>
+            <a href="{% url 'dashboard:profile' %}">
+                <img src="{% static 'img/icon.png' %}" class="nav-profile-icon" alt="Profile" height="40px" />
+            </a>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Analysis Tools</h3>
+                <div>
+                    <a href="{% url 'dashboard:dashboard' %}" class="sidebar-item {% if request.resolver_match.dashboard == 'dashboard' %} active {% endif %}">
+                        <span>📝</span><span>Idea Validation Form</span>
+                    </a>
+                    <a href="{% url 'dashboard:swot' %}" class="sidebar-item {% if request.resolver_match.swot == 'swot' %} active {% endif %}">
+                        <span>📊</span><span>SWOT Analysis</span><span class="sidebar-badge">AI</span>
+                    </a>
+                    <a href="{% url 'dashboard:feasibility' %}" class="sidebar-item {% if request.resolver_match.feasibility == 'feasibility' %} active {% endif %}">
+                        <span>📈</span><span>Feasibility Scores</span>
+                    </a>
+                    <a href="{% url 'dashboard:monetization' %}" class="sidebar-item {% if request.resolver_match.Monetization == 'Monetization' %} active {% endif %}">
+                        <span>💰</span><span>Monetization Analysis</span>
+                    </a>
+                    <a href="{% url 'dashboard:risk' %}" class="sidebar-item">
+                        <span>⚠</span><span>Risk Assessment</span>
+                    </a>
+                    <a href="{% url 'dashboard:history' %}" class="sidebar-item {% if request.resolver_match.url_name == 'history' %} active {% endif %}">
+                        <span>📁</span><span>My Ideas</span>
+                    </a>
+                    
+                    <a href="{% url 'dashboard:download_report' %}" class="sidebar-item">
+                        <span>⬇️</span><span>Download Report</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+<!-- Main content area -->
+<main class="main-content">
+    {% block body %}{% endblock %}
+</main>
+</div> <!-- closes .main-layout -->
+
+</body>
+</html>

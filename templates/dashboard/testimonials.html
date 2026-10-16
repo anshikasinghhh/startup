@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Testimonials</title>
+    <style>
+        /* Navbar styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f9fafb;
+            color: #1f2937;
+        }
+        nav {
+            background: #6366f1;
+            padding: 12px 24px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .testimonial-section {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 800px;
+            margin: 40px auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+        .testimonial-header {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 24px;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        @media (min-width: 768px) {
+            .testimonial-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .testimonial-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+        .testimonial-text {
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+        .testimonial-user {
+            text-align: right;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .no-feedback {
+            text-align: center;
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+        .testimonial-form h3 {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .testimonial-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #1f2937;
+        }
+        .form-group input,
+        .form-group textarea {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s;
+            resize: vertical;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+        .submit-feedback-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+            max-width: 200px;
+            align-self: center;
+        }
+        .submit-feedback-btn:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+    </nav>
+
+    <div class="testimonial-section">
+        <h2 class="testimonial-header">What Users Say</h2>
+
+        {% if testimonials %}
+        <div class="testimonial-grid">
+            {% for t in testimonials %}
+            <div class="testimonial-card">
+                <p class="testimonial-text">"{{ t.feedback }}"</p>
+                <p class="testimonial-user">- {{ t.name }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-feedback">No feedback submitted yet. Be the first to leave a testimonial!</p>
+        {% endif %}
+
+        <div class="testimonial-form">
+            <h3>Submit Your Feedback</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}">Your Name</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.feedback.id_for_label }}">Your Feedback</label>
+                    {{ form.feedback }}
+                </div>
+                <button type="submit" class="submit-feedback-btn">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

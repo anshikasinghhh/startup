@@ -1,0 +1,288 @@
+/* Clean Monetization Dashboard - Pattern Style */
+/* Clean Monetization Dashboard - Pattern Style */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: url("../img/notebook.jpg");
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #334155;
+    line-height: 1.6;
+    display: block;
+    padding: 2rem;
+}
+
+/* Main Container - Fixed */
+.container {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height:100vh;
+    width: 90%;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    display: block;
+    
+}
+
+/* Heading Section - Fixed */
+.heading-section {
+    width:100%;
+    margin-top:-20ox;
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    margin: 2rem auto;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1; /* Changed from 0 to 1 for immediate visibility */
+    transform: translateY(0); /* Reset transform */
+    position: relative;
+    background: #ffffff;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    max-width: 1000px;
+}
+
+.heading-section:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.08),
+        0 4px 10px rgba(0, 0, 0, 0.05);
+    border-color: rgba(203, 213, 225, 0.7);
+}
+
+.heading-section h1 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 auto 1rem;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.heading-section p {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin: 0.75rem auto;
+    letter-spacing: 0.025em;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* Data Box - Fixed */
+.data-box {
+    width: 100%;
+    max-width: 1000px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #ecfeff 50%, #fefce8 100%);
+    background-size: cover;
+    background-blend-mode: overlay;
+    border: 1px solid #cbd5e1;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.1),
+        0 4px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    opacity: 1; /* Changed from 0 to 1 for immediate visibility */
+    transform: translateY(0); /* Reset transform */
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    display:block;
+    margin: 2rem auto;
+    margin-top: 2rem;
+}
+
+.data-box h2 {
+    font-size: 1.5rem;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    margin: 0 auto 1.5rem;
+}
+
+/* Remove side line */
+.heading-section::before,
+.data-box::before {
+    content: none;
+}
+
+/* Animation Classes - Add these to your HTML elements for smooth entry */
+.fade-in {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.heading-section,
+.data-box {
+    width: 100%;
+    max-width: 800px;  /* ✅ Fixed width to allow centering */
+    margin: 1rem auto;
+}
+
+/* Placeholder - Transparent Clean Look */
+.placeholder {
+    text-align:center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #334155;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #f0f9ff 0%, #ecfeff 50%, #fefce8 100%);
+    background-size: cover;
+    background-blend-mode: overlay;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    border: none;
+    
+}
+
+.placeholder h3 {
+    color: #1e293b;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.placeholder ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.placeholder li {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.placeholder li::before {
+    content: '•';
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3b82f6;
+    font-weight: bold;
+}
+
+.placeholder li:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+    border-color: #cbd5e1;
+}
+
+.placeholder p {
+    margin-bottom: 1rem;
+    color: #475569;
+}
+
+.placeholder strong {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin: 1rem auto;
+        width: 95%;
+    }
+
+    .heading-section {
+        padding: 2rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .heading-section::before,
+    .data-box::before {
+        left: 1.5rem;
+    }
+
+    .heading-section h1 {
+        margin-left: 0.5rem;
+    }
+
+    .heading-section p {
+        margin-left: 0.5rem;
+    }
+
+    .data-box {
+        padding: 2rem 1.5rem;
+    }
+
+    .data-box h2 {
+        margin-left: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    .heading-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .data-box {
+        padding: 1.5rem 1rem;
+    }
+
+    .placeholder {
+        font-size: 0.9rem;
+    }
+}
+
+/* Clean Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(241, 245, 249, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(203, 213, 225, 0.8);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.8);
+}
+
+/* Performance Optimizations */
+.heading-section,
+.data-box,
+.placeholder {
+    will-change: transform;
+    contain: layout style paint;
+}

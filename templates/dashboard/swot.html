@@ -1,0 +1,53 @@
+{% extends 'base_dash.html' %} 
+{% load static %}  
+
+{% block head %}     
+    <!-- Google Fonts -->     
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">          
+    <!-- Font Awesome -->     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">          
+    <link rel="stylesheet" href="{% static 'css/swot.css' %}"> 
+{% endblock %}  
+
+{% block body %} 
+<div class="swot-container">     
+    <div class="header fade-in">         
+        <div class="header-content">             
+            <h1>SWOT Analysis Dashboard</h1>             
+            <p>Strategic Business Intelligence & Planning</p>         
+        </div>     
+    </div>      
+    
+    <div class="swot-rendered-output fade-in-delay">         
+        {{ swot_raw|safe }}     
+    </div>      
+    
+    <div class="footer fade-in-delay">         
+        <p class="footer-text">Analysis generated from comprehensive validation form data</p>         
+        <p class="analysis-date">Last Updated: July 25, 2025</p>     
+    </div> 
+</div>  
+
+<!-- Scripts --> 
+<script>     
+    document.addEventListener('DOMContentLoaded', function() {         
+        // Smooth fade-in animations         
+        const elements = document.querySelectorAll('.fade-in, .fade-in-delay');         
+        elements.forEach((el, index) => {             
+            setTimeout(() => {                 
+                el.style.opacity = '1';                 
+                el.style.transform = 'translateY(0)';             
+            }, index * 150);         
+        });          
+        
+        // SWOT box animations         
+        const swotBoxes = document.querySelectorAll('.swot-box');         
+        swotBoxes.forEach((box, index) => {             
+            setTimeout(() => {                 
+                box.style.opacity = '1';                 
+                box.style.transform = 'translateY(0) scale(1)';             
+            }, 300 + (index * 100));         
+        });     
+    }); 
+</script> 
+{% endblock %}

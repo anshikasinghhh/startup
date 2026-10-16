@@ -1,0 +1,155 @@
+{% extends 'base_dash.html' %}
+{% load static %}
+
+{% block body %}
+<!-- Floating Background -->
+<div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+        <img src="{% static 'img/icon.png' %}" class="profile-img" alt="Profile Icon">
+        
+        <h2 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h2>
+        <p class="profile-username">@{{ user.username }}</p>
+        <p class="profile-email">{{ user.email }}</p>
+
+        <div class="profile-stats">
+            <div class="stat-box">
+                <h4>Total Submissions</h4>
+                <p>{{ submission_count }}</p>
+            </div>
+            <div class="stat-box">
+                <h4>Validated Ideas</h4>
+                <p>{{ validated_ideas }}</p>
+            </div>
+            <div class="stat-box">
+                <h4>Avg Feasibility</h4>
+                <p>{{ avg_score }}</p>
+            </div>
+        </div>
+
+        <div class="profile-info">
+            <p><strong>Monetization Tips Used:</strong> {{ monetization_used }}</p>
+            <p><strong>Feedback Received:</strong> {{ feedback_received }}</p>
+            <p><strong>Member Since:</strong> {{ user.date_joined|date:"F Y" }}</p>
+        </div>
+
+        <div class="profile-socials">
+            <a href="{{ linkedin_url }}" target="_blank">🔗 LinkedIn</a> |
+            <a href="{{ github_url }}" target="_blank">💻 GitHub</a>
+        </div>
+
+        <div class="profile-footer">
+            <a href="{% url 'dashboard:edit_profile' %}" class="btn-change">Edit Profile</a>
+            <p style="margin-top: 15px;">🚀 Keep validating, keep innovating!</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+.profile-card {
+    background: rgba(255,255,255,0.9);
+    border-radius: 24px;
+    padding: 30px;
+    margin:0 auto;
+    width: 90%;
+    max-width: none;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    backdrop-filter: blur(20px);
+}
+.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 3px solid #4CAF50;
+}
+.profile-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+}
+.profile-username {
+    font-size: 1rem;
+    color: #555;
+}
+.profile-email {
+    font-size: 1rem;
+    color: #777;
+}
+.profile-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    gap:20px;
+}
+.stat-box {
+    flex: 1;
+    min-width: 150px;
+    margin: 10px;
+}
+.stat-box h4 {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+.stat-box p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4CAF50;
+}
+.profile-info p {
+    margin: 8px 0;
+    font-size: 0.95rem;
+    color: #555;
+}
+.profile-socials {
+    margin-top: 15px;
+}
+.profile-socials a {
+    color: #0073b1;
+    font-weight: 500;
+    margin: 0 5px;
+    text-decoration: none;
+}
+.profile-socials a:hover {
+    text-decoration: underline;
+}
+.btn-change {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: #2196F3;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
+}
+.btn-change:hover {
+    background: #0b7dda;
+    transform: scale(1.05);
+}
+@media (max-width: 768px) {
+    .profile-card {
+        width: 95%;
+        padding: 20px;
+    }
+    .profile-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+</style>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Georgia, serif; font-size: 12pt; }
+        h1 { text-align: center; font-size: 18pt; }
+        .entry { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+        .label { font-weight: bold; color: #333; }
+       .download-btn {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none !important;
+            border: none !important;   /* <== Important line */
+            font-family: 'Georgia', serif;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+}
+
+
+.download-btn:hover {
+    background: #43a047;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.3);
+    text-decoration: none !important;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Startup Journal - {{ user.username }}</h1>
+    {% for entry in entries %}
+        <div class="entry">
+            <p><span class="label">💡 Startup Idea:</span> {{ entry.startup_idea }}</p>
+            <p><span class="label">🏢 Business Domain:</span> {{ entry.get_business_domain_display }}</p>
+            <p><span class="label">❗ Problem Statement:</span> {{ entry.problem_statement }}</p>
+            <p><span class="label">🎯 Business Goal:</span> {{ entry.business_goal }}</p>
+            <p><span class="label">💰 Monetization Strategy:</span> {{ entry.monetization_strategy }}</p>
+            <p><span class="label">🌱 Social Impact:</span> {{ entry.social_impact }}</p>
+            <p><span class="label">⏳ Timeline:</span> {{ entry.timeline }}</p>
+            <p><span class="label">📅 Created At:</span> {{ entry.created_at|date:"F d, Y g:i A" }}</p>
+            <p><span class="label">📊 Feasibility Score:</span> {{ entry.feasibility_score }} - {{ entry.feasibility_level }}</p>
+            <p><span class="label">💬 Feasibility Comment:</span> {{ entry.feasibility_comment }}</p>
+
+            <p><span class="label">🧠 SWOT Analysis:</span> {{ entry.swot_analysis }}</p>
+
+            <p><span class="label">⚠️ Risk Score:</span> {{ entry.risk_score }} - {{ entry.risk_comment }}</p>
+
+            <p><span class="label">💸 Monetization Suggestion:</span> {{ entry.monetization_suggestion }}</p>
+
+        </div>
+    {% empty %}
+        <p>No entries yet.</p>
+    {% endfor %}
+</body>
+</html>

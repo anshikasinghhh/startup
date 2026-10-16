@@ -1,0 +1,242 @@
+{% extends 'base_dash.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+<body>
+  {% block body %}
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <div class="main-card">
+                    <!-- Hero Header -->
+                    <div class="hero-header">
+                        <div class="hero-content">
+                            <h1 class="hero-title">💡 Idea Validation Dashboard</h1>
+                            <p class="hero-subtitle">Transform Your Startup Idea into Reality</p>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-section">
+                                <label class="form-label">
+                                    <div class="label-dot"></div>
+                                    💡 Describe Your Startup Idea
+                                </label>
+                                <textarea name="startup_idea" class="form-textarea" rows="4" placeholder="Tell us about your innovative startup idea in 3-5 lines. What problem does it solve and how?" required>{{entry.startup_idea }}</textarea>
+                                <p class="form-help-text">Be specific about your unique value proposition</p>
+                            </div>
+
+                           <div class="space-y-3">
+                <label class="field-label">
+                    <div class="dot-indicator"></div>🏢 Business Domain
+                </label>
+                <select name="business_domain" class="form-select" required>
+                <option value="">Select your industry domain</option>
+                <option value="tech" {% if entry.business_domain == "tech" %}selected{% endif %}>Technology & Software</option>
+                <option value="health" {% if entry.business_domain == "health" %}selected{% endif %}>Healthcare & Medical</option>
+                <option value="edtech" {% if entry.business_domain == "edtech" %}selected{% endif %}>Education & EdTech</option>
+                <option value="fintech" {% if entry.business_domain == "fintech" %}selected{% endif %}>Finance & FinTech</option>
+                <option value="ecommerce" {% if entry.business_domain == "ecommerce" %}selected{% endif %}>E-commerce & Retail</option>
+                <option value="food" {% if entry.business_domain == "food" %}selected{% endif %}>Food & Beverage</option>
+                <option value="transportation" {% if entry.business_domain == "transportation" %}selected{% endif %}>Transportation & Logistics</option>
+                <option value="sustainability" {% if entry.business_domain == "sustainability" %}selected{% endif %}>Sustainability & Environment</option>
+                <option value="entertainment" {% if entry.business_domain == "entertainment" %}selected{% endif %}>Entertainment & Media</option>
+                <option value="other" {% if entry.business_domain == "other" %}selected{% endif %}>Other</option>
+                </select>
+
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="space-y-3">
+                <label class="field-label">
+                    <div class="dot-indicator"></div>🎯 Core Problem Statement
+                </label>
+                <input type="text" name="problem_statement" value="{{ entry.problem_statement }}" class="form-input" placeholder="What specific problem does your startup solve?" required>
+                <p class="helper-text">Define the pain point your solution addresses</p>
+            </div>
+
+            <!-- Goals Section -->
+            <div class="goals-section">
+                <div class="goals-header">
+                    <div class="goals-title">
+                        <div class="goals-icon">📈</div>
+                        <h3>Startup Goals & Vision</h3>
+                    </div>
+                    <button type="button" class="help-button" onclick="showGuide()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 space-y-6">
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>🎯 Business Goal/Vision
+                        </label>
+                        <textarea name="business_goal" class="form-textarea" rows="3" placeholder="What's your ultimate business vision?">{{entry.business_goal}}</textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>💰 Monetization Strategy
+                        </label>
+                        <textarea name="monetization_strategy" class="form-textarea" rows="3" placeholder="How do you plan to generate revenue?">{{entry.monetization_strategy}}</textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>🌍 Social Impact (Optional)
+                        </label>
+                        <textarea name="social_impact" class="form-textarea" rows="3" placeholder="What positive change will you create?">{{entry.social_impact}}</textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>⏱ Timeline & Expectations
+                        </label>
+                        <textarea name="timeline" class="form-textarea" rows="3" placeholder="Short/long term goals and key milestones">{{entry.timeline}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant Section -->
+            <div class="ai-section">
+                <div class="ai-header">
+                    <div class="ai-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="ai-title">AI Assistant</h3>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Online</span>
+                    </div>
+                </div>
+
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message">
+                        <div class="message-avatar">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <p class="message-text">Hi! I'm your AI assistant. I can help you refine your startup idea, suggest improvements, or answer any questions about the validation process. How can I assist you today?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat composer -->
+                <div class="chat-input-container">
+                    <input type="text" id="messageInput" class="chat-input" placeholder="Ask me anything about your startup idea..." onkeypress="handleKeyPress(event)">
+                    <button type="button" class="chat-send-button" onclick="sendMessageToAI()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-container">
+                <button type="submit" class="submit-button">
+                    <span>🔍 Validate My Idea</span>
+                </button>
+            </div>
+        </form>
+    
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <h3>📚 Startup Goals Guide</h3>
+            <p><strong>Business Goal/Vision:</strong> Describe your long-term vision for the company. What do you want to achieve in 5-10 years?</p>
+            <p><strong>Monetization Strategy:</strong> Explain how you plan to make money. Consider subscription models, one-time purchases, advertising, etc.</p>
+            <p><strong>Social Impact:</strong> What positive change will your startup bring to society? How will it make the world better?</p>
+            <p><strong>Timeline & Expectations:</strong> Set realistic short-term (6 months) and long-term (2-5 years) goals and milestones.</p>
+            <button class="close-button" onclick="closeGuide()">Got it!</button>
+        </div>
+    </div>
+
+    <script>
+        function showGuide() {
+            document.getElementById('helpModal').style.display = 'flex';
+        }
+
+        function closeGuide() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessageToAI();
+            }
+        }
+
+        function sendMessageToAI() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message';
+                userMessage.innerHTML = `
+                    <div style="margin-left: auto; max-width: 80%; display: flex; justify-content: flex-end;">
+                        <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 12px; border-radius: 16px;">
+                            <p class="message-text">${message}</p>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(userMessage);
+                
+                // Add AI response (simulated)
+                setTimeout(() => {
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'message';
+                    aiMessage.innerHTML = `
+                        <div class="message-avatar">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <p class="message-text">That's a great question! I'd be happy to help you think through that aspect of your startup. Could you provide more details about your specific industry or target market?</p>
+                        </div>
+                    `;
+                    chatMessages.appendChild(aiMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('helpModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+     {% endblock %}
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,49 @@
+{% extends 'base_dash.html' %} 
+{% load static %}  
+
+{% block head %} 
+<link rel="stylesheet" href="{% static 'css/risk.css' %}"> 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"> 
+{% endblock %}  
+
+{% block body %} 
+<body>     
+    <div class="container">         
+        <div class="heading-section fade-in">             
+            <h1>🚀 Startup Risk Assessment</h1>             
+            <p>Comprehensive analysis to identify and evaluate potential risks that could impact your startup's success. Make informed decisions with our detailed risk framework.</p>         
+        </div>          
+        
+        <div class="data-box fade-in-delay">             
+            <h2>Brief reasoning for the assigned risk level</h2>             
+            <div class="placeholder">                 
+                {{ risk_html|safe }}             
+            </div>         
+        </div>     
+    </div> 
+</body> 
+
+<!-- Scripts --> 
+<script>     
+    document.addEventListener('DOMContentLoaded', function() {         
+        // Smooth fade-in animations         
+        const elements = document.querySelectorAll('.fade-in, .fade-in-delay');         
+        elements.forEach((el, index) => {             
+            setTimeout(() => {                 
+                el.style.opacity = '1';                 
+                el.style.transform = 'translateY(0)';             
+            }, index * 150);         
+        });          
+        
+        // Data box animation         
+        const dataBox = document.querySelector('.data-box');         
+        if(dataBox) {
+            setTimeout(() => {                 
+                dataBox.style.opacity = '1';                 
+                dataBox.style.transform = 'translateY(0) scale(1)';             
+            }, 300);         
+        }
+    }); 
+</script> 
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base_dash.html' %}
+{% load static %}
+
+{% block head %}
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/monetization.css' %}">
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="max-width:800px; margin:0 auto; padding:1rem; background: rgba(255,255,255,0.2);">
+    <div class="heading-section">
+        <h1>Monetization Dashboard</h1>
+        <p>Revenue Strategies & Financial Planning</p>
+    </div>
+
+    <div class="data-box">
+        <h2>Revenue Model Analysis</h2>
+        <div class="placeholder">
+            {{ monetization_html|safe }}
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Smooth fade-in animations
+        const headingSection = document.querySelector('.heading-section');
+        const dataBox = document.querySelector('.data-box');
+        
+        setTimeout(() => {
+            headingSection.style.opacity = '1';
+            headingSection.style.transform = 'translateY(0)';
+        }, 100);
+        
+        setTimeout(() => {
+            dataBox.style.opacity = '1';
+            dataBox.style.transform = 'translateY(0)';
+        }, 300);
+    });
+</script>
+{% endblock %}

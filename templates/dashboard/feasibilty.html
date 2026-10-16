@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feasibility Score - Startup Validator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .score-overview {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .score-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .score-label {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .score-description {
+            color: #777;
+            font-size: 1.1rem;
+        }
+
+        .score-breakdown {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .breakdown-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .metric-info {
+            flex: 1;
+        }
+
+        .metric-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .metric-score {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .score-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 3rem;
+            text-align: center;
+        }
+
+        .score-bar {
+            width: 120px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .score-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+
+        .score-85 { width: 85%; background: linear-gradient(90deg, #4CAF50, #45a049); }
+        .score-72 { width: 72%; background: linear-gradient(90deg, #2196F3, #1976D2); }
+        .score-68 { width: 68%; background: linear-gradient(90deg, #FF9800, #F57C00); }
+        .score-91 { width: 91%; background: linear-gradient(90deg, #4CAF50, #2E7D32); }
+        .score-59 { width: 59%; background: linear-gradient(90deg, #FFC107, #FF8F00); }
+
+        .excellent { color: #4CAF50; }
+        .good { color: #2196F3; }
+        .moderate { color: #FF9800; }
+        .warning { color: #FFC107; }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .detail-card h3 {
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .icon-market { background: #4CAF50; }
+        .icon-tech { background: #2196F3; }
+        .icon-team { background: #FF9800; }
+        .icon-finance { background: #9C27B0; }
+
+        .recommendation {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .recommendation h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .recommendation p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .header h1 { font-size: 2rem; }
+            .score-overview { grid-template-columns: 1fr; }
+            .score-number { font-size: 3rem; }
+            .details-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Feasibility Analysis</h1>
+            <p>Comprehensive evaluation of your startup idea</p>
+        </header>
+
+        <div class="score-overview">
+            <div class="score-card">
+                <div class="score-number">78</div>
+                <div class="score-label">Overall Score</div>
+                <div class="score-description">Good potential with room for optimization</div>
+            </div>
+
+            <div class="score-breakdown">
+                <h2 class="breakdown-title">Score Breakdown</h2>
+                
+                <div class="metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Market Opportunity</div>
+                        <div class="metric-desc">Market size, demand, and competition analysis</div>
+                    </div>
+                    <div class="metric-score">
+                        <div class="score-value excellent">85</div>
+                        <div class="score-bar">
+                            <div class="score-fill score-85"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Technical Feasibility</div>
+                        <div class="metric-desc">Technology requirements and implementation complexity</div>
+                    </div>
+                    <div class="metric-score">
+                        <div class="score-value good">72</div>
+                        <div class="score-bar">
+                            <div class="score-fill score-72"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Team Capability</div>
+                        <div class="metric-desc">Skills, experience, and team composition</div>
+                    </div>
+                    <div class="metric-score">
+                        <div class="score-value moderate">68</div>
+                        <div class="score-bar">
+                            <div class="score-fill score-68"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Business Model</div>
+                        <div class="metric-desc">Revenue streams and monetization strategy</div>
+                    </div>
+                    <div class="metric-score">
+                        <div class="score-value excellent">91</div>
+                        <div class="score-bar">
+                            <div class="score-fill score-91"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-info">
+                        <div class="metric-name">Financial Viability</div>
+                        <div class="metric-desc">Funding requirements and profitability timeline</div>
+                    </div>
+                    <div class="metric-score">
+                        <div class="score-value warning">59</div>
+                        <div class="score-bar">
+                            <div class="score-fill score-59"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="details-grid">
+            <div class="detail-card">
+                <h3><span class="icon icon-market">M</span>Market Analysis</h3>
+                <p><strong>Strengths:</strong> Large addressable market with growing demand. Limited direct competition in your niche.</p>
+                <p><strong>Considerations:</strong> Market education may be required. Consider partnerships for faster market penetration.</p>
+            </div>
+
+            <div class="detail-card">
+                <h3><span class="icon icon-tech">T</span>Technical Assessment</h3>
+                <p><strong>Strengths:</strong> Proven technologies available. Clear technical roadmap with achievable milestones.</p>
+                <p><strong>Considerations:</strong> May require specialized expertise. Consider technical co-founder or advisory support.</p>
+            </div>
+
+            <div class="detail-card">
+                <h3><span class="icon icon-team">P</span>Team Evaluation</h3>
+                <p><strong>Strengths:</strong> Strong domain knowledge and complementary skills within core team.</p>
+                <p><strong>Considerations:</strong> Consider expanding technical capabilities. Advisory board could provide strategic guidance.</p>
+            </div>
+
+            <div class="detail-card">
+                <h3><span class="icon icon-finance">$</span>Financial Outlook</h3>
+                <p><strong>Strengths:</strong> Multiple revenue streams identified. Low initial operational costs.</p>
+                <p><strong>Considerations:</strong> Higher initial investment required. Explore pre-revenue funding options.</p>
+            </div>
+        </div>
+
+        <div class="recommendation">
+            <h2>Recommendation: Proceed with Strategic Planning</h2>
+            <p>Your startup shows strong potential with a solid foundation. Focus on addressing financial planning and team expansion to maximize success probability.</p>
+            <a href="#" class="cta-button">Get Detailed Action Plan</a>
+        </div>
+    </div>
+</body>
+</html>

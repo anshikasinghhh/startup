@@ -1,0 +1,166 @@
+{% extends 'base_dash.html' %}
+{% load static %}
+
+{% block body %}
+<div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+        <h2 class="profile-name">Edit Profile</h2>
+        {% if error_message %}
+            <div class="error-msg">{{ error_message }}</div>
+        {% endif %}
+        {% if success_message %}
+            <div class="success-msg">{{ success_message }}</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" value="{{ user.username }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="linkedin">LinkedIn URL</label>
+                <input type="url" name="linkedin" id="linkedin" value="{{ linkedin_url }}">
+            </div>
+            <div class="form-group">
+                <label for="github">GitHub URL</label>
+                <input type="url" name="github" id="github" value="{{ github_url }}">
+            </div>
+            <button type="submit" class="btn-save">Save Changes</button>
+        </form>
+    </div>
+</div>
+
+<style>
+    @media (min-width: 768px) {
+    form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+
+    .btn-save {
+        grid-column: span 2;
+    }
+
+    .error-msg,
+    .success-msg {
+        grid-column: span 2;
+    }
+}
+
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 30px 20px;
+    min-height: calc(100vh - 100px);
+}
+
+.error-msg {
+    background: #ffe6e6;
+    color: #cc0000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+.success-msg {
+    background: #e6ffea;
+    color: #008000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.profile-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 24px;
+    padding: 40px;
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    margin-top:-20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    backdrop-filter: blur(20px);
+}
+body {
+    margin-top: 0 !important;
+}
+
+
+
+.profile-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+form {
+    width: 100%;
+}
+
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-save {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+    background: #45a049;
+    transform: scale(1.02);
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,195 @@
+/* Clean Risk Assessment Notebook Style */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: url("../img/notebook.jpg") center/cover no-repeat fixed;
+    min-height: 100vh;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+/* Heading Section */
+.heading-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.08),
+        0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(-20px);
+    position: relative;
+}
+
+
+.heading-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 10px 25px rgba(0, 0, 0, 0.12),
+        0 4px 10px rgba(0, 0, 0, 0.06);
+    border-color: rgba(203, 213, 225, 0.8);
+}
+
+
+
+.heading-section h1 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: #5b2c83;
+    margin: 0;
+    margin-left: 1rem;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.heading-section p {
+    font-size: 1.125rem;
+    color: #6c5b7b;
+    margin-top: 0.75rem;
+    margin-left: 1rem;
+    letter-spacing: 0.025em;
+    font-weight: 400;
+}
+
+/* Notebook Style AI Output */
+.data-box {
+    background-color: transparent;
+    padding: 2.5rem;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+    background-image: 
+        linear-gradient(#e2e8f0 1px, transparent 1px),
+        repeating-linear-gradient(45deg, rgba(59,130,246,0.03) 0px, transparent 8px);
+    background-size: 100% 24px, 12px 12px;
+    border-left: 3px solid #f87171;
+    border-radius: 0;
+    min-height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #ede9fe 0%, #fce7f3 50%, #e0f2fe 100%);
+    background-size: cover;
+    background-blend-mode: overlay;
+}
+
+/* Fade-in Animation */
+.fade-in, .fade-in-delay {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.placeholder {
+    font-size: 1rem;
+    color: #475569;
+    line-height: 1.7;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Style AI content */
+.placeholder p {
+    margin-bottom: 1rem;
+    color: #475569;
+}
+
+.placeholder ul, .placeholder ol {
+    margin: 1rem 0 1rem 2rem;
+}
+
+.placeholder li {
+    margin-bottom: 0.5rem;
+    color: #475569;
+}
+
+.placeholder h3, .placeholder h4 {
+    color: #5b2c83;
+    margin: 1rem 0;
+    font-weight: 600;
+}
+
+.placeholder strong {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin: 1rem auto;
+        width: 95%;
+    }
+
+    .heading-section {
+        padding: 2rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .heading-section h1 {
+        margin-left: 0.5rem;
+    }
+
+    .heading-section p {
+        margin-left: 0.5rem;
+    }
+
+    .data-box {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    .heading-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .data-box {
+        padding: 1.5rem 1rem;
+    }
+
+    .placeholder {
+        font-size: 0.9rem;
+    }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(241, 245, 249, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(203, 213, 225, 0.8);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.8);
+}

@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ValidatorAI - Validate Your Startup Idea</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating Particles Animation */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 30%; top: 35%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 50%; top: 50%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 70%; top: 30%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 90%; top: 10%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.7; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes typing-dots {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Guide Popup - CSS Only Toggle */
+        .guide-toggle {
+            display: none;
+        }
+
+        .guide-popup {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .guide-toggle:checked + .guide-popup {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .guide-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .guide-content {
+            position: relative;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 28rem;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .guide-toggle:checked + .guide-popup .guide-content {
+            transform: scale(1);
+        }
+
+        .close-guide {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 8px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .close-guide:hover {
+            background: #e5e7eb;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            transition: all 0.3s;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-menu {
+            display: none;
+            align-items: center;
+            gap: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .nav-menu { display: flex; }
+        }
+
+        .nav-link {
+            color: #6b7280;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transform: translateY(-1px);
+        }
+
+        .logout-btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 24px rgba(118, 75, 162, 0.6);
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ec4899, #f97316);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        /* Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 76px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            padding: 24px;
+            display: none;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar { display: block; }
+        }
+
+        .sidebar-section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #6b7280;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .sidebar-badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .sidebar-badge.new {
+            background: #10b981;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content { padding: 32px; }
+        }
+
+        .content-wrapper {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .hero-header {
+            background: linear-gradient(135deg, #ec4899, #f97316);
+            padding: 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+        }
+
+        /* Form Styles */
+        .form-container {
+            padding: 32px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .label-dot {
+            width: 4px;
+            height: 4px;
+            background: #ec4899;
+            border-radius: 50%;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            color: #1f2937;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input:hover, .form-textarea:hover, .form-select:hover {
+            transform: translateY(-1px);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-help-text {
+            color: #6b7280;
+            font-size: 14px;
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* Goals Section */
+        .goals-section {
+            background: linear-gradient(135deg, #dbeafe, #e0e7ff);
+            border: 2px solid #bfdbfe;
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+        }
+
+        .goals-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .goals-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .goals-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .goals-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .guide-btn {
+            width: 32px;
+            height: 32px;
+            background: #f97316;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .guide-btn:hover {
+            background: #ea580c;
+            transform: scale(1.1);
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .goals-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* AI Assistant Section */
+        .ai-section {
+            background: linear-gradient(135deg, #f9fafb, #dbeafe);
+            border: 2px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .ai-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(16, 185, 129, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-text {
+            color: #059669;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            max-height: 320px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.user .message-content {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            display: flex;
+            gap: 12px;
+            max-width: 80%;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .ai-avatar {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            color: white;
+        }
+
+        .user-avatar-msg {
+            background: linear-gradient(135deg, #ec4899, #f97316);
+            color: white;
+        }
+
+        .message-bubble {
+            padding: 12px;
+            border-radius: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .ai-bubble {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .user-bubble {
+            background: linear-gradient(135deg, #ec4899, #f97316);
+            color: white;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #6b7280;
+            border-radius: 50%;
+            animation: typing-dots 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        /* Chat Input */
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            color: #1f2937;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .chat-send-btn {
+            padding: 12px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .chat-send-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #0891b2);
+            transform: scale(1.05);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            padding-top: 16px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Guide Content Styles */
+        .guide-item {
+            border-radius: 16px;
+            padding: 16px;
+            border-width: 1px;
+            margin-bottom: 16px;
+        }
+
+        .guide-item h4 {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .guide-item p {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .guide-blue { background: #dbeafe; border-color: #bfdbfe; }
+        .guide-blue h4 { color: #1e40af; }
+
+        .guide-green { background: #d1fae5; border-color: #a7f3d0; }
+        .guide-green h4 { color: #065f46; }
+
+        .guide-purple { background: #e9d5ff; border-color: #c4b5fd; }
+        .guide-purple h4 { color: #6b21a8; }
+
+        .guide-orange { background: #fed7aa; border-color: #fdba74; }
+        .guide-orange h4 { color: #9a3412; }
+
+        .guide-pink { background: #fce7f3; border-color: #f9a8d4; }
+        .guide-pink h4 { color: #be185d; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-header { padding: 32px 24px; }
+            .hero-title { font-size: 24px; }
+            .form-container { padding: 24px; }
+            .goals-section { padding: 24px; }
+            .main-content { padding: 16px; }
+        }
+        form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 16px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            color: #1f2937;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-input:hover, .form-textarea:hover, .form-select:hover {
+            transform: translateY(-1px);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .helper-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-style: italic;
+        }
+
+        .goals-section {
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            border: 2px solid #bfdbfe;
+            border-radius: 24px;
+            padding: 32px;
+            position: relative;
+        }
+
+        .goals-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .goals-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .goals-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .goals-title h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .help-button {
+            width: 32px;
+            height: 32px;
+            background: #f97316;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-button:hover {
+            background: #ea580c;
+            transform: scale(1.1);
+        }
+
+        .grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        @media (max-width: 768px) {
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ai-section {
+            background: linear-gradient(135deg, #f9fafb 0%, #dbeafe 100%);
+            border: 2px solid #e5e7eb;
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .ai-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(34, 197, 94, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: #16a34a;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .chat-messages {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            max-height: 320px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .message:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 16px;
+            max-width: 80%;
+        }
+
+        .message-text {
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: #1f2937;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            color: #1f2937;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .chat-send-button {
+            padding: 12px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-send-button:hover {
+            background: linear-gradient(135deg, #2563eb, #0891b2);
+            transform: scale(1.05);
+        }
+
+        .submit-container {
+            text-align: center;
+            padding-top: 16px;
+        }
+
+        .submit-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 16px 48px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        }
+
+        .submit-button span {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .modal p {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .close-button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            float: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="floating-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Guide Popup Toggle (CSS Only) -->
+    <input type="checkbox" id="guideToggle" class="guide-toggle">
+    <div class="guide-popup">
+        <div class="guide-backdrop"></div>
+        <div class="guide-content">
+            <label for="guideToggle" class="close-guide">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </label>
+
+            <div>
+                <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; color: #1f2937;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #7c3aed;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
+                    </svg>
+                    Goals Guide
+                </h3>
+
+                <div>
+                    <div class="guide-item guide-blue">
+                        <h4>🎯 Business Vision</h4>
+                        <p>Define your long-term mission and what you want to achieve with your startup.</p>
+                    </div>
+
+                    <div class="guide-item guide-green">
+                        <h4>💰 Monetization</h4>
+                        <p>Explain how you'll generate revenue - subscription, one-time payment, freemium, etc.</p>
+                    </div>
+
+                    <div class="guide-item guide-purple">
+                        <h4>🌍 Social Impact</h4>
+                        <p>Describe the positive change your startup will create in society.</p>
+                    </div>
+
+                    <div class="guide-item guide-orange">
+                        <h4>⏱ Timeline</h4>
+                        <p>Set short-term and long-term milestones with realistic timeframes.</p>
+                    </div>
+
+                    <div class="guide-item guide-pink">
+                        <h4>📈 Success Metrics</h4>
+                        <p>Define how you'll measure success - user growth, revenue targets, market share.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="brand">🚀 GoValid</div>
+            <div class="nav-menu">
+                
+                <a href="{% url 'dashboard:history' %}" class="nav-link">History</a>
+                <a href="#" class="nav-link">Reports</a>
+                <a href="#" class="nav-link">Help</a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="#" class="logout-btn">Logout</a>
+                <div class="user-avatar">U</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Analysis Tools</h3>
+                <div>
+                    <a href="#" class="sidebar-item active">
+                        <span>📝</span>
+                        <span>Idea Validation Form</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>📊</span>
+                        <span>SWOT Analysis</span>
+                        <span class="sidebar-badge">AI</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>📈</span>
+                        <span>Feasibility Scores</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>💰</span>
+                        <span>Monetization Analysis</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>⚠</span>
+                        <span>Risk Assessment</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Reports & Insights</h3>
+                <div>
+                    <a href="#" class="sidebar-item">
+                        <span>💡</span>
+                        <span>AI Suggestions</span>
+                        <span class="sidebar-badge new">NEW</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>🏆</span>
+                        <span>Competitor Analysis</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>🌍</span>
+                        <span>Market Research</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>📅</span>
+                        <span>Implementation Timeline</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Resources</h3>
+                <div>
+                    <a href="#" class="sidebar-item">
+                        <span>📋</span>
+                        <span>Business Templates</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>📚</span>
+                        <span>Startup Guides</span>
+                    </a>
+                    <a href="#" class="sidebar-item">
+                        <span>👥</span>
+                        <span>Community Forum</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <div class="main-card">
+                    <!-- Hero Header -->
+                    <div class="hero-header">
+                        <div class="hero-content">
+                            <h1 class="hero-title">💡 Idea Validation Dashboard</h1>
+                            <p class="hero-subtitle">Transform Your Startup Idea into Reality</p>
+                        </div>
+                    </div>
+
+                    <div class="form-container">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <!-- Startup Idea -->
+                            <div class="form-section">
+                                <label class="form-label">
+                                    <div class="label-dot"></div>
+                                    💡 Describe Your Startup Idea
+                                </label>
+                                <textarea name="startup_idea" class="form-textarea" rows="4" placeholder="Tell us about your innovative startup idea in 3-5 lines. What problem does it solve and how?" required></textarea>
+                                <p class="form-help-text">Be specific about your unique value proposition</p>
+                            </div>
+
+                           <div class="space-y-3">
+                <label class="field-label">
+                    <div class="dot-indicator"></div>🏢 Business Domain
+                </label>
+                <select name="business_domain" class="form-select">
+                    <option value="">Select your industry domain</option>
+                    <option value="tech">Technology & Software</option>
+                    <option value="health">Healthcare & Medical</option>
+                    <option value="edtech">Education & EdTech</option>
+                    <option value="fintech">Finance & FinTech</option>
+                    <option value="ecommerce">E-commerce & Retail</option>
+                    <option value="food">Food & Beverage</option>
+                    <option value="transportation">Transportation & Logistics</option>
+                    <option value="sustainability">Sustainability & Environment</option>
+                    <option value="entertainment">Entertainment & Media</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <!-- Problem Statement -->
+            <div class="space-y-3">
+                <label class="field-label">
+                    <div class="dot-indicator"></div>🎯 Core Problem Statement
+                </label>
+                <input type="text" name="problem_statement" class="form-input" placeholder="What specific problem does your startup solve?" required>
+                <p class="helper-text">Define the pain point your solution addresses</p>
+            </div>
+
+            <!-- Goals Section -->
+            <div class="goals-section">
+                <div class="goals-header">
+                    <div class="goals-title">
+                        <div class="goals-icon">📈</div>
+                        <h3>Startup Goals & Vision</h3>
+                    </div>
+                    <button type="button" class="help-button" onclick="showGuide()">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 space-y-6">
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>🎯 Business Goal/Vision
+                        </label>
+                        <textarea name="business_goal" class="form-textarea" rows="3" placeholder="What's your ultimate business vision?"></textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>💰 Monetization Strategy
+                        </label>
+                        <textarea name="monetization_strategy" class="form-textarea" rows="3" placeholder="How do you plan to generate revenue?"></textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>🌍 Social Impact (Optional)
+                        </label>
+                        <textarea name="social_impact" class="form-textarea" rows="3" placeholder="What positive change will you create?"></textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="field-label">
+                            <div class="dot-indicator"></div>⏱ Timeline & Expectations
+                        </label>
+                        <textarea name="timeline" class="form-textarea" rows="3" placeholder="Short/long term goals and key milestones"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Assistant Section -->
+            <div class="ai-section">
+                <div class="ai-header">
+                    <div class="ai-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="ai-title">AI Assistant</h3>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Online</span>
+                    </div>
+                </div>
+
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message">
+                        <div class="message-avatar">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <p class="message-text">Hi! I'm your AI assistant. I can help you refine your startup idea, suggest improvements, or answer any questions about the validation process. How can I assist you today?</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat composer -->
+                <div class="chat-input-container">
+                    <input type="text" id="messageInput" class="chat-input" placeholder="Ask me anything about your startup idea..." onkeypress="handleKeyPress(event)">
+                    <button type="button" class="chat-send-button" onclick="sendMessageToAI()">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-container">
+                <button type="submit" class="submit-button">
+                    <span>🔍 Validate My Idea</span>
+                </button>
+            </div>
+        </form>
+    
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <h3>📚 Startup Goals Guide</h3>
+            <p><strong>Business Goal/Vision:</strong> Describe your long-term vision for the company. What do you want to achieve in 5-10 years?</p>
+            <p><strong>Monetization Strategy:</strong> Explain how you plan to make money. Consider subscription models, one-time purchases, advertising, etc.</p>
+            <p><strong>Social Impact:</strong> What positive change will your startup bring to society? How will it make the world better?</p>
+            <p><strong>Timeline & Expectations:</strong> Set realistic short-term (6 months) and long-term (2-5 years) goals and milestones.</p>
+            <button class="close-button" onclick="closeGuide()">Got it!</button>
+        </div>
+    </div>
+
+    <script>
+        function showGuide() {
+            document.getElementById('helpModal').style.display = 'flex';
+        }
+
+        function closeGuide() {
+            document.getElementById('helpModal').style.display = 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessageToAI();
+            }
+        }
+
+        function sendMessageToAI() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessages = document.getElementById('chatMessages');
+                
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message';
+                userMessage.innerHTML = `
+                    <div style="margin-left: auto; max-width: 80%; display: flex; justify-content: flex-end;">
+                        <div style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 12px; border-radius: 16px;">
+                            <p class="message-text">${message}</p>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(userMessage);
+                
+                // Add AI response (simulated)
+                setTimeout(() => {
+                    const aiMessage = document.createElement('div');
+                    aiMessage.className = 'message';
+                    aiMessage.innerHTML = `
+                        <div class="message-avatar">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <p class="message-text">That's a great question! I'd be happy to help you think through that aspect of your startup. Could you provide more details about your specific industry or target market?</p>
+                        </div>
+                    `;
+                    chatMessages.appendChild(aiMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+                
+                input.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        document.getElementById('validationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Form submitted! In a real application, this would process your startup validation.');
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('helpModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+

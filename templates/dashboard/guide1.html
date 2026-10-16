@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Startup Roadmap</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f0f4f8;
+      --card-bg: rgba(255, 255, 255, 0.2);
+      --glass-blur: blur(12px);
+      --primary: #6366f1;
+      --accent: #ec4899;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0e7ff, #fce7f3);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      animation: fadeInDown 1s ease-in-out;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #555;
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      margin-bottom: 3rem;
+      animation: popUp 1s ease-in-out;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input, textarea, select {
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.8);
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.9rem;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: var(--accent);
+    }
+
+    .roadmap {
+      max-width: 800px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .step {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 16px;
+      border-left: 8px solid var(--primary);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: relative;
+      animation: slideIn 1s ease forwards;
+    }
+
+    .step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: -40px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--accent);
+      color: white;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      0% { transform: translateX(-50px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .step::before {
+        left: -30px;
+        width: 24px;
+        height: 24px;
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🚀 Startup Launchpad</h1>
+    <p>Validate your idea and follow the roadmap to success!</p>
+  </header>
+
+  <div class="card">
+    <form>
+      <input type="text" placeholder="Startup Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <input type="text" placeholder="Problem You're Solving" required />
+      <textarea rows="4" placeholder="Describe your solution..."></textarea>
+      <select required>
+        <option value="">Stage of your idea</option>
+        <option value="ideation">Ideation</option>
+        <option value="validation">Validation</option>
+        <option value="mvp">MVP</option>
+        <option value="scaling">Scaling</option>
+      </select>
+      <button type="submit">Submit & Get Roadmap</button>
+    </form>
+  </div>
+
+  <section class="roadmap">
+    <div class="step" data-step="1">
+      <h3>Idea Validation</h3>
+      <p>Talk to potential customers, identify pain points, and refine your idea through feedback.</p>
+    </div>
+    <div class="step" data-step="2">
+      <h3>Build MVP</h3>
+      <p>Create a minimal version of your product that solves the core problem effectively.</p>
+    </div>
+    <div class="step" data-step="3">
+      <h3>Test & Iterate</h3>
+      <p>Gather real-world usage data, tweak features, and improve based on user behavior.</p>
+    </div>
+    <div class="step" data-step="4">
+      <h3>Launch & Scale</h3>
+      <p>Deploy your startup, monitor traction, and prepare for funding, hiring, and growth.</p>
+    </div>
+  </section>
+</body>
+</html>
