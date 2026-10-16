@@ -31,7 +31,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-startup-validator-site-sec
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["startup-qcsq.onrender.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -88,6 +89,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+CSRF_TRUSTED_ORIGINS = [
+    "https://startup-qcsq.onrender.com",
+]
 
 
 # Password validation
